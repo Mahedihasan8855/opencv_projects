@@ -22,6 +22,7 @@ cv.createTrackbar("VALUE MIN","HSV",0,255,empty)
 cv.createTrackbar("VALUE MAX","HSV",255,255,empty)
 
 
+
 while True:
     isTrue, frame=cap.read()
     framehsv=cv.cvtColor(frame,cv.COLOR_BGR2HSV)
