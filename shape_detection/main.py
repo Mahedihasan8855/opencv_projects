@@ -57,8 +57,20 @@ def stackImages(scale,imgArray):
 
 def getcontours(img,imgcontour):
     countours,hierarchy=cv.findContours(img,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_NONE)
+
     for i in countours:
-        cv.drawContours(imgcontour,i,-1,(255,255,0),7)
+        area=cv.contourArea(i)
+        if area>1000:
+            cv.drawContours(imgcontour,i,-1,(255,255,0),3)
+            peri=cv.arcLength(i,True)
+            approx=cv.approxPolyDP(i,0.02*peri,True)
+            x,y,w,h=cv.boundingRect(approx)
+            cv.rectangle(imgcontour,(x,y),(x+w,y+h),(255,0,255),4)
+            cv.putText(imgcontour,"Points: "+str(len(approx)),(x+w+20,y+20),cv.FONT_HERSHEY_COMPLEX,0.7,(0,255,0),2)
+            cv.putText(imgcontour, "Area: " + str(int(area)), (x + w + 20, y + 45), cv.FONT_HERSHEY_COMPLEX, 0.7,(0, 255, 0), 2)
+
+
+
 
 
 while True:
