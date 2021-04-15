@@ -17,13 +17,6 @@ cv.createTrackbar("Threashold1","parameters",23,255,empty)
 cv.createTrackbar("Threashold2","parameters",20,255,empty)
 
 
-
-
-
-
-
-
-
 def stackImages(scale,imgArray):
     rows = len(imgArray)
     cols = len(imgArray[0])
