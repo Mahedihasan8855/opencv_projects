@@ -2,8 +2,8 @@ import cv2 as cv
 import numpy as  np
 
 
-framewidth=300
-framheight=200
+framewidth=640
+framheight=280
 cap= cv.VideoCapture(0)
 cap.set(1,framewidth)
 cap.set(2,framheight)

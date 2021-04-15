@@ -7,6 +7,23 @@ frameheight=280
 cap=cv.VideoCapture(0)
 cap.set(3,framewidth)
 cap.set(4,frameheight)
+
+def empty(a):
+    pass
+
+cv.namedWindow("parameters")
+cv.resizeWindow("parameters",640,80)
+cv.createTrackbar("Threashold1","parameters",23,255,empty)
+cv.createTrackbar("Threashold2","parameters",20,255,empty)
+
+
+
+
+
+
+
+
+
 def stackImages(scale,imgArray):
     rows = len(imgArray)
     cols = len(imgArray[0])
@@ -38,14 +55,26 @@ def stackImages(scale,imgArray):
         ver = hor
     return ver
 
+def getcontours(img,imgcontour):
+    countours,hierarchy=cv.findContours(img,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_NONE)
+    for i in countours:
+        cv.drawContours(imgcontour,i,-1,(255,255,0),7)
 
 
 while True:
     success, img=cap.read()
-
+    imgcountour=img.copy()
     imgblur=cv.GaussianBlur(img,(7,7),1)
     imggray=cv.cvtColor(imgblur,cv.COLOR_BGR2GRAY)
-    imgstack=stackImages(0.8,([img,imgblur,imggray]))
+    threshold1=cv.getTrackbarPos("Threashold1","parameters")
+    threshold2=cv.getTrackbarPos("Threashold2", "parameters")
+    imgcanny=cv.Canny(imggray,threshold1,threshold2)
+    kernel=np.ones((5,5),np.uint8)
+    imgdil=cv.dilate(imgcanny,kernel,iterations=1)
+    getcontours(imgdil,imgcountour)
+
+
+    imgstack=stackImages(0.8,([img,imggray,imgcanny],[imgblur,imgcountour,imgcountour]))
     cv.imshow("Result",imgstack)
     if cv.waitKey(1) & 0xff==ord("f"):
         break
